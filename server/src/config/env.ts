@@ -10,4 +10,5 @@ export const config = {
   uploadDir: process.env.UPLOAD_DIR || path.resolve(process.cwd(), 'uploads'),
   openRouterKey: process.env.OPENROUTER_API_KEY || '',
   corsOrigin: process.env.CORS_ORIGIN || '*',
+  jwtSecret: process.env.JWT_SECRET || 'change-me-in-prod',
 };

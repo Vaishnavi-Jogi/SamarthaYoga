@@ -36,10 +36,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.ProfileModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const ProfileSchema = new mongoose_1.Schema({
+    userId: { type: mongoose_1.Schema.Types.ObjectId, ref: 'User', index: true, required: true },
     name: { type: String, required: true },
     age: { type: Number, required: true },
+    gender: { type: String, enum: ['male', 'female', 'other'], required: true },
+    level: { type: String, enum: ['beginner', 'intermediate', 'advanced'], required: true },
     flexibility: { type: String, enum: ['low', 'medium', 'high'], default: 'medium' },
     goal: { type: String },
-});
+    pcosOrPcod: { type: Boolean },
+}, { timestamps: true });
 exports.ProfileModel = mongoose_1.default.model('Profile', ProfileSchema);
 //# sourceMappingURL=Profile.js.map

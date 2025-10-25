@@ -5,6 +5,8 @@ import path from 'path';
 import axios from 'axios';
 import { config } from '../config/env';
 import { AnalysisModel } from '../models/Analysis';
+import { requireAuth } from '../utils/auth';
+import { ActivityModel } from '../models/Activity';
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
@@ -27,6 +29,7 @@ const upload = multer({
 });
 
 export const uploadRouter = Router();
+uploadRouter.use(requireAuth);
 
 uploadRouter.post('/', upload.single('file'), async (req, res) => {
   try {
@@ -62,6 +65,11 @@ uploadRouter.post('/', upload.single('file'), async (req, res) => {
       profile: result.profile,
       createdAt: new Date(),
     });
+
+    // mark streak activity
+    const userId = (req as any).user.id;
+    const today = new Date().toISOString().slice(0,10);
+    await ActivityModel.findOneAndUpdate({ userId, type: 'upload', date: today }, { userId, type: 'upload', date: today, meta: { asana_name: result.asana_name } }, { upsert: true });
 
     res.json({ ...result, file: path.basename(filePath), analysis_id: saved._id });
   } catch (err: any) {
