@@ -22,8 +22,8 @@ async function chatWithOpenRouter(prompt) {
         }, {
             headers: {
                 'Authorization': `Bearer ${env_1.config.openRouterKey}`,
-                'HTTP-Referer': 'https://example.com',
-                'X-Title': 'Asana Coach MVP',
+                'HTTP-Referer': 'https://asana-coach.local',
+                'X-Title': 'Asana Coach',
             },
         });
         return resp.data.choices?.[0]?.message?.content ?? 'No response';

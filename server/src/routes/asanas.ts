@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { AsanaModel } from '../models/Asana';
+import { requireAuth } from '../utils/auth';
 
 export const asanasRouter = Router();
+asanasRouter.use(requireAuth);
 
 asanasRouter.get('/', async (req, res) => {
   const q = (req.query.q as string)?.trim();

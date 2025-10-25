@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { AnalysisModel } from '../models/Analysis';
+import { requireAuth } from '../utils/auth';
 
 export const analysisRouter = Router();
+analysisRouter.use(requireAuth);
 
 analysisRouter.get('/', async (req, res) => {
   const limit = Math.min(parseInt((req.query.limit as string) || '10', 10), 50);

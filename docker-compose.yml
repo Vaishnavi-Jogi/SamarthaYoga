@@ -1,0 +1,42 @@
+version: '3.8'
+services:
+  mongo:
+    image: mongo:7
+    restart: always
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo_data:/data/db
+  analyzer:
+    build: ./analyzer
+    environment:
+      - PYTHONUNBUFFERED=1
+    ports:
+      - "8000:8000"
+  server:
+    build: ./server
+    environment:
+      - PORT=4000
+      - MONGO_URI=mongodb://mongo:27017/asana_mvp
+      - ANALYZER_URL=http://analyzer:8000
+      - CORS_ORIGIN=*
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - JWT_SECRET=${JWT_SECRET}
+    depends_on:
+      - mongo
+      - analyzer
+    ports:
+      - "4000:4000"
+    volumes:
+      - uploads:/app/uploads
+  web:
+    build: ./web
+    environment:
+      - VITE_API_BASE_URL=/api
+    depends_on:
+      - server
+    ports:
+      - "8080:80"
+volumes:
+  mongo_data:
+  uploads:

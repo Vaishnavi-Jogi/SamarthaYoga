@@ -44,6 +44,8 @@ const path_1 = __importDefault(require("path"));
 const axios_1 = __importDefault(require("axios"));
 const env_1 = require("../config/env");
 const Analysis_1 = require("../models/Analysis");
+const auth_1 = require("../utils/auth");
+const Activity_1 = require("../models/Activity");
 const storage = multer_1.default.diskStorage({
     destination: (req, file, cb) => {
         fs_1.default.mkdirSync(env_1.config.uploadDir, { recursive: true });
@@ -66,6 +68,7 @@ const upload = (0, multer_1.default)({
     limits: { fileSize: 8 * 1024 * 1024 }
 });
 exports.uploadRouter = (0, express_1.Router)();
+exports.uploadRouter.use(auth_1.requireAuth);
 exports.uploadRouter.post('/', upload.single('file'), async (req, res) => {
     try {
         const flexibility = req.body.flexibility || 'medium';
@@ -96,6 +99,10 @@ exports.uploadRouter.post('/', upload.single('file'), async (req, res) => {
             profile: result.profile,
             createdAt: new Date(),
         });
+        // mark streak activity
+        const userId = req.user.id;
+        const today = new Date().toISOString().slice(0, 10);
+        await Activity_1.ActivityModel.findOneAndUpdate({ userId, type: 'upload', date: today }, { userId, type: 'upload', date: today, meta: { asana_name: result.asana_name } }, { upsert: true });
         res.json({ ...result, file: path_1.default.basename(filePath), analysis_id: saved._id });
     }
     catch (err) {

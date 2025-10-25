@@ -3,11 +3,15 @@ import cors from 'cors';
 import mongoose from 'mongoose';
 import path from 'path';
 import { config } from './config/env';
+import { activityRouter } from './routes/activity';
+import { challengeRouter } from './routes/challenge';
+import { musicRouter } from './routes/music';
 import { asanasRouter } from './routes/asanas';
 import { uploadRouter } from './routes/upload';
 import { chatRouter } from './routes/chat';
 import { analysisRouter } from './routes/analysis';
 import { profileRouter } from './routes/profile';
+import { authRouter } from './routes/auth';
 
 async function bootstrap() {
   await mongoose.connect(config.mongoUri);
@@ -23,6 +27,10 @@ async function bootstrap() {
   app.use('/api/chat', chatRouter);
   app.use('/api/analysis', analysisRouter);
   app.use('/api/profile', profileRouter);
+  app.use('/api/activity', activityRouter);
+  app.use('/api/auth', authRouter);
+  app.use('/api/challenge', challengeRouter);
+  app.use('/api/music', musicRouter);
 
   app.use('/uploads', express.static(path.resolve(config.uploadDir)));
 

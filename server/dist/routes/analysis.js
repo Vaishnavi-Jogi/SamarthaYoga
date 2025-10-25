@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.analysisRouter = void 0;
 const express_1 = require("express");
 const Analysis_1 = require("../models/Analysis");
+const auth_1 = require("../utils/auth");
 exports.analysisRouter = (0, express_1.Router)();
+exports.analysisRouter.use(auth_1.requireAuth);
 exports.analysisRouter.get('/', async (req, res) => {
     const limit = Math.min(parseInt(req.query.limit || '10', 10), 50);
     const items = await Analysis_1.AnalysisModel.find().sort({ createdAt: -1 }).limit(limit);

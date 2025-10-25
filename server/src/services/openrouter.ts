@@ -20,8 +20,8 @@ export async function chatWithOpenRouter(prompt: string): Promise<string> {
       {
         headers: {
           'Authorization': `Bearer ${config.openRouterKey}`,
-          'HTTP-Referer': 'https://example.com',
-          'X-Title': 'Asana Coach MVP',
+          'HTTP-Referer': 'https://asana-coach.local',
+          'X-Title': 'Asana Coach',
         },
       }
     );

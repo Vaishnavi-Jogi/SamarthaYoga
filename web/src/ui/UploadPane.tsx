@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { api } from '../api';
 
 interface Props { onResult: (data: any) => void }
 
@@ -20,7 +20,7 @@ export const UploadPane: React.FC<Props> = ({ onResult }) => {
       form.append('age', String(age));
       form.append('flexibility', flexibility);
       form.append('goal', goal);
-      const resp = await axios.post('/api/upload', form, { headers: { 'Content-Type': 'multipart/form-data' } });
+      const resp = await api.post('/upload', form, { headers: { 'Content-Type': 'multipart/form-data' } });
       onResult(resp.data);
     } catch (e: any) {
       alert(e?.response?.data?.error || e.message);

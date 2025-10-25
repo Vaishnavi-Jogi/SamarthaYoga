@@ -3,7 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.asanasRouter = void 0;
 const express_1 = require("express");
 const Asana_1 = require("../models/Asana");
+const auth_1 = require("../utils/auth");
 exports.asanasRouter = (0, express_1.Router)();
+exports.asanasRouter.use(auth_1.requireAuth);
 exports.asanasRouter.get('/', async (req, res) => {
     const q = req.query.q?.trim();
     if (q) {

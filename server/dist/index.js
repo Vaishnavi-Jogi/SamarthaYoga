@@ -8,11 +8,15 @@ const cors_1 = __importDefault(require("cors"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const path_1 = __importDefault(require("path"));
 const env_1 = require("./config/env");
+const activity_1 = require("./routes/activity");
+const challenge_1 = require("./routes/challenge");
+const music_1 = require("./routes/music");
 const asanas_1 = require("./routes/asanas");
 const upload_1 = require("./routes/upload");
 const chat_1 = require("./routes/chat");
 const analysis_1 = require("./routes/analysis");
 const profile_1 = require("./routes/profile");
+const auth_1 = require("./routes/auth");
 async function bootstrap() {
     await mongoose_1.default.connect(env_1.config.mongoUri);
     const app = (0, express_1.default)();
@@ -24,6 +28,10 @@ async function bootstrap() {
     app.use('/api/chat', chat_1.chatRouter);
     app.use('/api/analysis', analysis_1.analysisRouter);
     app.use('/api/profile', profile_1.profileRouter);
+    app.use('/api/activity', activity_1.activityRouter);
+    app.use('/api/auth', auth_1.authRouter);
+    app.use('/api/challenge', challenge_1.challengeRouter);
+    app.use('/api/music', music_1.musicRouter);
     app.use('/uploads', express_1.default.static(path_1.default.resolve(env_1.config.uploadDir)));
     app.listen(env_1.config.port, () => {
         console.log(`Server listening on http://localhost:${env_1.config.port}`);
